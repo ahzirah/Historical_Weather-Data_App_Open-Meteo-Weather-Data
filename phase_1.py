@@ -153,9 +153,8 @@ def average_mean_temp_by_city(connection, date_from, date_to):
         result = cursor.execute(query, (date_from, date_to)).fetchall()
 
         # Iterate over the results and display the results. 
-        for row in result:
-           print(f"City: {row[0]} -- Avg Temperature: {row[1]:.2f}°C")
-           return result
+        for row in result:           print(f"City: {row[0]} -- Avg Temperature: {row[1]}°C")
+        return result
         
 
 
