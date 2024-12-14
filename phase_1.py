@@ -211,7 +211,8 @@ def average_annual_precipitation_by_country(connection, year):
 
 
 if __name__ == "__main__":
-    with sqlite3 .connect("../ICA_database/CIS4044-N-SDI-OPENMETEO-PARTIAL.db") as conn:
+    with sqlite3.connect("/Users/hyeladzirajames/Library/CloudStorage/OneDrive-TeessideUniversity/SECOND SEMESTER/SOFTWARE FOR DIGITAL INNOVATIONS/ICA_DELIVERABLES/D3914083_JAMES.HYELADZIRA/Historical_Weather-Data_App(Open-Meteo-Weather-Data)/CIS4044-N-SDI-OPENMETEO-PARTIAL.db") as conn:
+
         select_all_countries(conn)
         print("----------------------------------------------------------------------------------------------------------------")
         print("\n")
