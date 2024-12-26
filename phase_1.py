@@ -174,6 +174,7 @@ def average_mean_temp_by_city(connection, date_from, date_to):
 
 
 
+
 # 6.QUERY TO GET THE AVERAGE ANNUAL PRECIPITATION
 def average_annual_precipitation_by_country(connection, year):
    # Calculate the average annual precipitation by a given country and year.
@@ -330,34 +331,34 @@ def average_temperature_by_city_and_country(connection, city_id, year):
 
 
 
-# 10.QUERY TO GET THE AVERAGE RAINFALL BY CITY AND COUNTRY
-def average_rainfall_by_city_and_country(connection, city_id, year):
-    # Calculate average rainfall by city and country in a given year.
+# 10.QUERY TO GET THE SEVEN DAY AVERAGE TEMPERATURE BY CITY
+def seven_day_temperature_by_city(connection, city_id, start_date):
+    # Calculate the average temperature for each day over a seven-day range starting from the given date of a given city.
    
     try:
         # Get a cursor object from the database connection that will be used to execute database query.
         cursor = connection.cursor()
        
-        # Define the query 
+       # Calculate the end date for the 7-day range
+        start_date_obj = datetime.strptime(start_date, "%Y-%m-%d")
+        end_date_obj = start_date_obj + timedelta(days=6)
+        end_date = end_date_obj.strftime("%Y-%m-%d")
+
+        # Define the query
         query = '''
-            SELECT c.name as city_name, co.name as country_name, AVG(dw.precipitation) as avg_rainfall
+            SELECT dw.date as date, dw.mean_temp as temperature
             FROM cities c
-            JOIN countries co
-            ON c.country_id = co.id
-            JOIN daily_weather_entries dw
+            JOIN daily_weather_entries dw 
             ON c.id = dw.city_id
-            WHERE c.id = ? 
-            AND strftime('%Y', dw.date) = ? 
-            GROUP BY c.name, co.name;
+            WHERE c.id = ? AND dw.date BETWEEN ? AND ?;
         '''
 
         # Execute the query via the cursor object and display the results to the console.
-        result = cursor.execute(query, (city_id, year)).fetchall()
+        result = cursor.execute(query, (city_id, start_date, end_date)).fetchall()
 
-        # Iterate over the results and display the results. 
+        print(f"Seven Day Temperature for city ID: {city_id} from {start_date} to {end_date}:")
         for row in result:
-            print(f"The Average Rainfall For Country: {row['country_name']} -- and City: {row['city_name']}-- is AVG Rainfall: {row['avg_rainfall']:.2f} mm")
-            
+            print(f"Date: {row['date']},Temperature: {row['temperature']:.2f}")
         return result
     
     except sqlite3.OperationalError as ex:
@@ -464,7 +465,7 @@ if __name__ == "__main__":
         print("\n")
 
         print("10.------------Average Rainfall By City And Country---------------------------------------------------------------")
-        average_rainfall_by_city_and_country(conn, 1, "2022")
+        seven_day_temperature_by_city(conn, 1, "2022-05-16")
         print("---------------------------------------------------------------------------------------------------------------")
         print("\n")
 
