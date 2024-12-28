@@ -293,34 +293,30 @@ def minimum_and_maximum_monthly_temperature_by_city(connection, city_id, year):
 
 
 
-# 9.QUERY TO GET THE AVERAGE TEMPERATURE BY CITY AND COUNTRY
-def average_temperature_by_city_and_country(connection, city_id, year):
-    # Calculate average temperature by city and country in a given year.
+# 9.QUERY TO GET THE AVERAGE TEMPERATURE BY AGAINST AVERAGE PRECIPITATION FOR SEVEN DAYS
+def average_temperature_vs_average_precipitation(connection, city_id, date):
+    # Calculate average temperature vs Average Precipitation by city ID.
    
     try:
         # Get a cursor object from the database connection that will be used to execute database query.
         cursor = connection.cursor()
        
         # Define the query 
-        query = '''
-            SELECT c.name as city_name, co.name as country_name, AVG(dw.min_temp) as avg_temperature
-            FROM cities c
-            JOIN countries co
-            ON c.country_id = co.id
-            JOIN daily_weather_entries dw
-            ON c.id = dw.city_id
-            WHERE c.id = ? 
-            AND strftime('%Y', dw.date) = ? 
-            GROUP BY c.name, co.name;
-        '''
+        query = """
+            SELECT date, AVG(mean_temp) AS avg_temperature, AVG(precipitation) AS avg_precipitation
+            FROM daily_weather_entries
+            WHERE city_id = ? AND date BETWEEN DATE(?) AND DATE(?, '+6 days')
+            GROUP BY date
+            ORDER BY date;
+        """
 
         # Execute the query via the cursor object and display the results to the console.
-        result = cursor.execute(query, (city_id, year)).fetchall()
+        result = cursor.execute(query, (city_id, date, date)).fetchall()
 
         # Iterate over the results and display the results. 
         for row in result:
-            print(f"The Average Temperature for Country: {row['country_name']} -- and City: {row['city_name']}-- is AVG Temperature: {row['avg_temperature']:.2f}°C")
-            
+            print(f"Date: {row['date']}, AVG Temperature: {row['avg_temperature']:.2f}°C, AVG Precipitation: {row['avg_precipitation']:.2f}mm")
+        
         return result
     
     except sqlite3.OperationalError as ex:
@@ -460,11 +456,11 @@ if __name__ == "__main__":
         print("\n")
 
         print("9.------------Average Temperature By City And Country------------------------------------------------------------")
-        average_temperature_by_city_and_country(conn, 1, "2022")
+        average_temperature_vs_average_precipitation(conn, 1, "2022-05-16")
         print("---------------------------------------------------------------------------------------------------------------")
         print("\n")
 
-        print("10.------------Average Rainfall By City And Country---------------------------------------------------------------")
+        print("10.------------Seven Day Temperature By City And Country---------------------------------------------------------------")
         seven_day_temperature_by_city(conn, 1, "2022-05-16")
         print("---------------------------------------------------------------------------------------------------------------")
         print("\n")

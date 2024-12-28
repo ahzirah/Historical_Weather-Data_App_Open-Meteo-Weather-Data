@@ -13,18 +13,21 @@
 # Imports
 import sqlite3
 import os
-import matplotlib as plt
+import matplotlib.pyplot as plt
 from phase_1 import ( 
     min_max_mean_temperature_and_precipitation_by_city, 
     seven_day_temperature_by_city, 
     seven_day_precipitation, 
     minimum_and_maximum_monthly_temperature_by_city, 
-    average_mean_temp_by_city, )
+    average_mean_temp_by_city,
+    average_temperature_vs_average_precipitation, )
 
 
 # PLOT ALL THE CHARTS IN A BLOCK CALLED WEATHER DATA APP
 
 def plot_open_meteo_weather_data_app(connection, city_id):
+      plt.figure(figsize=(18, 10))
+      
      
    # 1. Bar Chart To Show The Seven Day Precipitation
 
@@ -47,7 +50,7 @@ def plot_open_meteo_weather_data_app(connection, city_id):
 
    # 2. Bar Chart To Show The Average Seven Temperature For a Set of Cities
  
-      data = average_mean_temp_by_city(connection)
+      data = average_mean_temp_by_city(connection, "2022-01-16", "2022-01-22")
       cities = [row[0] for row in data]
       avg_temp = [row[1] for row in data]
 
@@ -66,7 +69,7 @@ def plot_open_meteo_weather_data_app(connection, city_id):
 
    # 3. Line Chart To Show The Seven Day Average Temperature Variation
 
-      data = seven_day_temperature_by_city(connection, city_id)
+      data = seven_day_temperature_by_city(connection, city_id, "2022-01-16")
       days = [row[0] for row in data]
       avg_temp = [row[1] for row in data]
 
@@ -119,7 +122,7 @@ def plot_open_meteo_weather_data_app(connection, city_id):
 
    # 5. MULTI-LINE CHART TO SHOW THE MINIMUM AND MAXIMUM TEMPERATURE FOR 12 months
 
-      data = minimum_and_maximum_monthly_temperature_by_city(connection, city_id)
+      data = minimum_and_maximum_monthly_temperature_by_city(connection, city_id, "2022")
       months = [row[0] for row in data]
       min_temp = [row[1] for row in data]
       max_temp = [row[2] for row in data]
@@ -139,38 +142,31 @@ def plot_open_meteo_weather_data_app(connection, city_id):
 
 
 
-   # 6. SCATTER PLOT CHART TO SHOW THE AVERAGE TEMPERATURE AGAINST AVERAGE RAINFALL FOR A GIVEN CITY/COUNTRY.
+   # 6. SCATTER PLOT CHART TO SHOW THE AVERAGE TEMPERATURE AGAINST AVERAGE PRECIPITATION FOR SEVEN DAYS
 
-      # temperature_data = queries.average_temperature_by_city_and_country(connection, city_id, year)
-      # rainfall_data = queries.average_rainfall_by_city_and_country(connection, city_id, year)
+      data = average_temperature_vs_average_precipitation(connection, city_id, "2022-05-16")
+      dates = [row['date'] for row in data]
+      avg_temperature = [row['avg_temperature'] for row in data]
+      avg_precipitation = [row['avg_precipitation'] for row in data]
       
-      # # Plot the Scatterplot chart
-      # plt.scatter(temperature_data, rainfall_data, color='blue', label='City Data')
+      # Plot the Scatterplot chart
+      plt.subplot(3, 2, 6)
+      plt.scatter(avg_temperature, avg_precipitation, color='blue', marker='o', label=f"City ID: {city_id}")
 
-      # # add the x and y labels and the bar graph title 
-      # plt.xlabel("Average Temperature (°C) ")
-      # plt.ylabel("Average Rainfall (mm)")
-      # plt.title(f"AVERAGE TEMPERATURE AGAINST AVERAGE RAINFALL FOR CITY ID {city_id} IN THE YEAR {year} " )
-      # plt.legend()
-      # plt.grid(True, linestyle='--', alpha=0.7)
+      for i, date in enumerate(dates):
+         plt.annotate(date, (avg_temperature[i], avg_precipitation[i]), fontsize=8, alpha=0.7)
+
+      # add the x and y labels and the bar graph title 
+      plt.xlabel("Average Temperature (°C) ")
+      plt.ylabel("Average Precipitation (mm)")
+      plt.title(f"AVERAGE SEVEN DAY TEMPERATURE VS RAINFALL FOR CITY ID {city_id}  " )
+      plt.legend()
+      plt.grid(True, linestyle='--', alpha=0.7)
 
 
   # DISPLAY ALL CHARTS
       plt.tight_layout() 
       plt.show()
-
-# Function to retrieve country_id and city_id based on user input
-def get_city_and_country_ids(connection, country_name, city_name):
-    query = """
-    SELECT countries.id AS country_id, cities.id AS city_id
-    FROM countries
-    JOIN cities ON countries.id = cities.country_id
-    WHERE countries.name = ? AND cities.name = ?
-    """
-    cursor = connection.cursor()
-    cursor.execute(query, (country_name, city_name))
-    result = cursor.fetchone()
-    return result if result else (None, None)
 
 
 file_path = os.path.abspath(__file__)
@@ -183,22 +179,30 @@ if __name__ == "__main__":
     with sqlite3.connect(database_location) as conn:
       conn.row_factory = sqlite3.Row
       while True:
-        country = input("Enter country (or press 'x' to exit): ").strip()
-        if country.lower() == 'x':
+        
+          print (" COUNTRY ----------ID")
+          print (" GREAT BRITAIN -----1")
+          print (" FRANCE ------------2")
+          country = input("Enter a country ID from the list above (or press 'x' to exit): ").strip()
+          if country.lower() == 'x':
+              print("Exiting the application.")
+              break
+       
+          print (" CITY --------------ID")
+          print (" MIDDLESBROUGH ------1")
+          print (" LONDON -------------2")
+          print (" PARIS --------------3")
+          print (" TOULOUSE -----------4")
+          city = input("Enter city ID from the list below (or press 'x' to exit): ").strip()
+          if city.lower() == 'x':
             print("Exiting the application.")
             break
-        city = input("Enter city: ").strip()
-        country_id, city_id = get_city_and_country_ids(conn, country, city)
-
-        if not country_id or not city_id:
-                print("Error: Invalid country or city. Please try again.")
-                continue
-
-        try:
-                plot_open_meteo_weather_data_app(conn, country_id, city_id)
-        except Exception as e:
-                print(f"An error occurred while plotting data: {e}")
-        
-
+          try:
+             city_id = int(city)
+             plot_open_meteo_weather_data_app(conn, city_id)
+          except ValueError:
+            print("Invalid city ID. Please enter a valid number.")
+    
+           
       
      
