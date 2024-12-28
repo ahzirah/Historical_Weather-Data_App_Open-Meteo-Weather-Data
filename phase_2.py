@@ -26,7 +26,7 @@ from phase_1 import (
 # PLOT ALL THE CHARTS IN A BLOCK CALLED WEATHER DATA APP
 
 def plot_open_meteo_weather_data_app(connection, city_id):
-      plt.figure(figsize=(18, 10))
+      plt.figure(figsize=(12, 10))
       
      
    # 1. Bar Chart To Show The Seven Day Precipitation
@@ -104,18 +104,19 @@ def plot_open_meteo_weather_data_app(connection, city_id):
       plt.subplot(3, 2, 4)
       #fig, ax = plt.subplots(figsize=(10, 6))
 
-      plt.bar(x, min_temp, width=0.2, label='Min Temp', align='center')
-      plt.bar([p + 0.2 for p in x], max_temp, width=0.2, label='Max Temp', align='center')
-      plt.bar([p + 0.4 for p in x], mean_temp, width=0.2, label='Mean Temp', align='center')
-      plt.bar([i - width for i in x], min_precip, width=width, label='Min Precip (mm)', bottom=min_temp, color='lightblue')
-      plt.bar(x, max_precip, width=width, label='Max Precip (mm)', bottom=max_temp, color='pink')
-      plt.bar([i + width for i in x], mean_precip, width=width, label='Avg Precip (mm)', bottom=mean_temp, color='lightgreen')
+      plt.bar([p - width for p in x], min_temp, width, label='Min Temp', color='blue')
+      plt.bar(x, max_temp, width, label='Max Temp', color='red')
+      plt.bar([p + width for p in x], mean_temp, width, label='Mean Temp', color='green')
+      plt.bar([p + 2 * width for p in x], min_precip, width, label='Min Precip', color='lightblue')
+      plt.bar([p + 3 * width for p in x], max_precip, width, label='Max Precip', color='pink')
+      plt.bar([p + 4 * width for p in x], mean_precip, width, label='Mean Precip', color='lightgreen')
+
 
       # Add labels and title
       plt.xlabel('City')
       plt.ylabel('Temperature (°C) / Precipitation (mm)')
       plt.title(f" Weather Data for Cities ")
-      plt.xticks([p + 0.2 for p in x], cities)
+      plt.xticks(x, cities, rotation=50)
       plt.legend()
 
 
@@ -159,9 +160,8 @@ def plot_open_meteo_weather_data_app(connection, city_id):
       # add the x and y labels and the bar graph title 
       plt.xlabel("Average Temperature (°C) ")
       plt.ylabel("Average Precipitation (mm)")
-      plt.title(f"AVERAGE SEVEN DAY TEMPERATURE VS RAINFALL FOR CITY ID {city_id}  " )
-      plt.legend()
       plt.grid(True, linestyle='--', alpha=0.7)
+      plt.legend()
 
 
   # DISPLAY ALL CHARTS
