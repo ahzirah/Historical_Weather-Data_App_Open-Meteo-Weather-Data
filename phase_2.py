@@ -6,7 +6,7 @@
 ###########################----------------------------------------------------##############################
 
 
-#................................. PHASE 2 - PBASIC GRAPH PLOTS USING MATPLOTLIB LIBRARY............................#
+#................................. PHASE 2 - BASIC GRAPH PLOTS USING MATPLOTLIB LIBRARY............................#
 
 
 
@@ -24,7 +24,9 @@ from phase_1 import (
 # PLOT ALL THE CHARTS IN A BLOCK CALLED WEATHER DATA APP
 
 def plot_open_meteo_weather_data_app(connection, city_id):
-      plt.figure(figsize=(12, 10))
+      plt.figure(figsize=(10, 8))
+      # Add a header for the entire figure
+      plt.suptitle(f"WEATHER DATA CHARTS FOR CITY ID {city_id} IN THR YEAR 2022", fontfamily='serif', fontsize=12, fontweight='bold')
       
      
    # 1. Bar Chart To Show The Seven Day Precipitation
@@ -73,42 +75,37 @@ def plot_open_meteo_weather_data_app(connection, city_id):
 
       # plot the line chart
       plt.subplot(3, 2, 3)
-      plt.plot(days, avg_temp, color='red', marker='o', label='Precipitation (mm)')
+      plt.plot(days, avg_temp, color='purple', marker='o', label='Precipitation (mm)')
 
       # add the x and y labels and the bar graph title 
       plt.xlabel("Days")
       plt.ylabel("Temperature ")
       plt.title(f"SEVEN DAY AVERAGE TEMPERATURE VARIATION FOR CITY ID {city_id} " )
       plt.xticks(rotation=50)
+      plt.legend()
 
 
 
    # 4.Grouped Bar Chart to Show The Min/Max/Mean Temperature and precipitation
 
-      data = min_max_mean_temperature_and_precipitation_by_city(connection, city_id)
+      data = min_max_mean_temperature_and_precipitation_by_city(connection, "2022")
       cities = [row['city_name'] for row in data]
       min_temp = [row['min_temperature'] for row in data]
       max_temp = [row['max_temperature'] for row in data]
       mean_temp = [row['mean_temperature'] for row in data]
-      min_precip = [row['min_precipitation'] for row in data]
-      max_precip = [row['max_precipitation'] for row in data]
-      mean_precip = [row['mean_precipitation'] for row in data]
+      avg_precip = [row['avg_precipitation'] for row in data]
 
       # Set up the positions for the bars
       x = range(len(cities))
-      width = 0.15 
+      width = 0.2 
 
       # Plot the grouped bar charts
       plt.subplot(3, 2, 4)
-      #fig, ax = plt.subplots(figsize=(10, 6))
 
-      plt.bar([p - width for p in x], min_temp, width, label='Min Temp', color='blue')
-      plt.bar(x, max_temp, width, label='Max Temp', color='red')
-      plt.bar([p + width for p in x], mean_temp, width, label='Mean Temp', color='green')
-      plt.bar([p + 2 * width for p in x], min_precip, width, label='Min Precip', color='lightblue')
-      plt.bar([p + 3 * width for p in x], max_precip, width, label='Max Precip', color='pink')
-      plt.bar([p + 4 * width for p in x], mean_precip, width, label='Mean Precip', color='lightgreen')
-
+      plt.bar([p - 1.5 * width for p in x], min_temp, width, label='Min Temp', color='blue')
+      plt.bar([p - 0.5 * width for p in x], max_temp, width, label='Max Temp', color='red')
+      plt.bar([p + 0.5 * width for p in x], mean_temp, width, label='Mean Temp', color='green')
+      plt.bar([p + 1.5 * width for p in x], avg_precip, width, label='Avg Precip', color='brown')
 
       # Add labels and title
       plt.xlabel('City')
@@ -122,6 +119,7 @@ def plot_open_meteo_weather_data_app(connection, city_id):
    # 5. MULTI-LINE CHART TO SHOW THE MINIMUM AND MAXIMUM TEMPERATURE FOR 12 months
 
       data = minimum_and_maximum_monthly_temperature_by_city(connection, city_id, "2022")
+      print("Data received:", data)
       months = [row[0] for row in data]
       min_temp = [row[1] for row in data]
       max_temp = [row[2] for row in data]
@@ -164,4 +162,11 @@ def plot_open_meteo_weather_data_app(connection, city_id):
 
   # DISPLAY ALL CHARTS
       plt.tight_layout() 
-      plt.show()   
+      plt.show() 
+
+  
+
+# # Example subplot
+# plt.subplot(3, 2, 1)
+# plt.bar(['Day 1', 'Day 2', 'Day 3'], [10, 15, 7], color='blue')
+# plt.title("Sample Bar Chart") 

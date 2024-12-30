@@ -226,9 +226,7 @@ def min_max_mean_temperature_and_precipitation_by_city(connection, year):
                 MIN(dw.min_temp) as min_temperature,
                 MAX(dw.max_temp) as max_temperature,
                 AVG(dw.mean_temp) as mean_temperature,
-                MIN(dw.precipitation) as min_precipitation,
-                MAX(dw.precipitation) as max_precipitation,
-                AVG(dw.precipitation) as mean_precipitation
+                AVG(dw.precipitation) as avg_precipitation
             FROM cities c
             JOIN daily_weather_entries dw
             ON c.id = dw.city_id
@@ -243,7 +241,7 @@ def min_max_mean_temperature_and_precipitation_by_city(connection, year):
         for row in result:
 
             print(f"City: {row['city_name']} -- Min Temperature: {row['min_temperature']:.2f}°C, Max Temperature: {row['max_temperature']:.2f}°C, Mean Temperature: {row['mean_temperature']:.2f}°C")
-            print(f"City: {row['city_name']} -- Min Precipitation: {row['min_precipitation']:.2f}°C, Max Precipitation: {row['max_precipitation']:.2f}°C, Mean Precipitation: {row['mean_precipitation']:.2f}°C")
+            print(f"City: {row['city_name']} -- Avg Precipitation: {row['avg_precipitation']:.2f}°C")
             
         return result
     
