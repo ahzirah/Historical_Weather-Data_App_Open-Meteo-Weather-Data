@@ -100,30 +100,48 @@ def phase_2_menu():
         print("--------------------------------------------------------")
         print("\n")
 
-        countries = {"1": "GREAT BRITAIN", "2": "FRANCE"}
-        cities = {"1": "MIDDLESBROUGH", "2": "LONDON", "3": "PARIS", "4": "TOULOUSE"}
+        countries = {"1": "GREAT BRITAIN", "2": "FRANCE" }
+        cities_in_countries = {
+              "1": {"1": "MIDDLESBROUGH", "2": "LONDON"},  
+              "2": {"3": "PARIS", "4": "TOULOUSE"}      
+              }
 
         with sqlite3.connect(database_location) as conn:
           conn.row_factory = sqlite3.Row
         while True:
-            print("AVAILBLE LOCATIONS:")
+            print("AVAILABLE COUNTRIES:")
             for country_id, country_name in countries.items():
                     print(f"COUNTRY: {country_name} (ID: {country_id})")
-            for city_id, city_name in cities.items():
-                    print(f"  CITY: {city_name} (ID: {city_id})")
 
-            user_input = input("Enter 'Country ID City ID' for visualization (e.g., '1 2') or 'x' to exit: ").strip()
-            if user_input.lower() == 'x':
-                    print("Exiting the application.")
-                    break
+            country_id = input("\nEnter 'Country ID' for visualization (e.g., 1) or 'x' to exit: ").strip()
+            if country_id.lower() == 'x':
+                print("Exiting to the main menu.")
+                break
+            if country_id not in countries:
+                print("Invalid Country ID. Please try again.")
+                continue
+            
+             # Display cities for the selected country
+            print(f"\nCITIES IN {countries[country_id]}:")
+            for city_id, city_name in cities_in_countries[country_id].items():
+                 print(f"  CITY: {city_name} (ID: {city_id})")
+
+            city_id = input("\nEnter 'City ID' for visualization (e.g., 1) or 'x' to go back: ").strip()
+            if city_id.lower() == 'x':
+                print("Returning to country selection.")
+                continue
+            
+            if city_id not in cities_in_countries[country_id]:
+                print("Invalid City ID for the selected country. Please try again.")
+                continue
+            
+
             try:
-                    country_id, city_id = map(int, user_input.split())
-                    if str(country_id) in countries and str(city_id) in cities:
-                        plot_open_meteo_weather_data_app(conn, city_id)
-                    else:
-                        print("Invalid IDs. Please try again.")
+                city_id = int(city_id)
+                print(f"Generating visualization for {cities_in_countries[country_id][str(city_id)]} in {countries[country_id]}")
+                plot_open_meteo_weather_data_app(conn, city_id)
             except ValueError:
-                    print("Invalid input format. Use 'Country ID City ID'.")
+                    print("Invalid input format.")
 
 
 
@@ -133,7 +151,7 @@ def phase_3_menu():
             print("\n--- PHASE 3 - DATA RETRIEVAL AND STORAGE ---")
             print("--------------------------------------------------------")
             print("\n")
-            print("1. Fetch and Store Weather Data")
+            print("1. Retrieve and Store Weather Data")
             print("2. View Stored Weather Data")
             print("0. Exit to Main Menu")
             
@@ -142,8 +160,6 @@ def phase_3_menu():
                 data_retrieval_and_storage()
             # elif choice == "2":
             #     view_stored_weather_data()
-            # elif choice == "3":
-            #     clear_weather_data()
             elif choice == "0":
                 break
             else:
@@ -157,13 +173,13 @@ if __name__ == "__main__":
         with sqlite3.connect(database_location) as conn:
             conn.row_factory = sqlite3.Row
             while True:
-                print("\n -------------- Weather App Main Menu ----------------")
+                print("\n -------------- WEATHER APP MAIN MENU ----------------")
                 print("1. PHASE 1: PYTHON AND SQLITE3 DATABASE QUERIES")
                 print("2. PHASE 2: BASIC GRAPH PLOTS USING MATPLOTLIB LIBRARY")
                 print("3. PHASE 3: DATA RETRIEVAL AND STORAGE")
                 print("0. Exit")
 
-                choice = input("Enter your choice: ")
+                choice = input("Enter Any of The Above Options to View the Weather App in detail: ")
                 if choice == "1":
                     phase_1_menu()
                 elif choice == "2":
@@ -174,6 +190,6 @@ if __name__ == "__main__":
                     print("Exiting the application. Goodbye!")
                     break
                 else:
-                    print("Invalid choice! Please try again.")
+                    print("XXX!!.. Invalid option! Please try again.")
     except sqlite3.Error as e:
         print(f"Database error: {e}")
