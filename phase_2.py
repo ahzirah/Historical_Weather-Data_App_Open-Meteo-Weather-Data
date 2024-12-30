@@ -172,37 +172,36 @@ def plot_open_meteo_weather_data_app(connection, city_id):
 file_path = os.path.abspath(__file__)
 working_directory = os.path.dirname(file_path)
 os.chdir(working_directory)
-#database_location = "CIS4044-N-SDI-OPENMETEO-PARTIAL.db"
 
 if __name__ == "__main__":
+    
     database_location = "CIS4044-N-SDI-OPENMETEO-PARTIAL.db"
+    countries = {"1": "GREAT BRITAIN", "2": "FRANCE"}
+    cities = {"1": "MIDDLESBROUGH", "2": "LONDON", "3": "PARIS", "4": "TOULOUSE"}
+
     with sqlite3.connect(database_location) as conn:
       conn.row_factory = sqlite3.Row
       while True:
+         print("AVAILBLE LOCATIONS:")
+         for country_id, country_name in countries.items():
+                print(f"COUNTRY: {country_name} (ID: {country_id})")
+         for city_id, city_name in cities.items():
+                print(f"  CITY: {city_name} (ID: {city_id})")
+
+         user_input = input("Enter 'Country ID City ID' (e.g., '1 2') or 'x' to exit: ").strip()
+         if user_input.lower() == 'x':
+                print("Exiting the application.")
+                break
+         try:
+                country_id, city_id = map(int, user_input.split())
+                if str(country_id) in countries and str(city_id) in cities:
+                    plot_open_meteo_weather_data_app(conn, city_id)
+                else:
+                    print("Invalid IDs. Please try again.")
+         except ValueError:
+                print("Invalid input format. Use 'Country ID City ID'.")
         
-          print (" COUNTRY ----------ID")
-          print (" GREAT BRITAIN -----1")
-          print (" FRANCE ------------2")
-          country = input("Enter a country ID from the list above (or press 'x' to exit): ").strip()
-          if country.lower() == 'x':
-              print("Exiting the application.")
-              break
-       
-          print (" CITY --------------ID")
-          print (" MIDDLESBROUGH ------1")
-          print (" LONDON -------------2")
-          print (" PARIS --------------3")
-          print (" TOULOUSE -----------4")
-          city = input("Enter city ID from the list below (or press 'x' to exit): ").strip()
-          if city.lower() == 'x':
-            print("Exiting the application.")
-            break
-          try:
-             city_id = int(city)
-             plot_open_meteo_weather_data_app(conn, city_id)
-          except ValueError:
-            print("Invalid city ID. Please enter a valid number.")
-    
+         
            
       
      
