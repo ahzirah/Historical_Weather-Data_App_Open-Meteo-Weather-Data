@@ -11,7 +11,6 @@
 
 #imports
 import sqlite3
-import os
 from datetime import datetime, timedelta
 
 
@@ -399,73 +398,3 @@ def seven_day_precipitation(connection, city_id, start_date):
     except sqlite3.OperationalError as ex:
         print(f"SQL Error: {str(ex)}")
 
-
-
-
-
-
-
-file_path = os.path.abspath(__file__)
-working_directory = os.path.dirname(file_path)
-os.chdir(working_directory)
-database_location = "CIS4044-N-SDI-OPENMETEO-PARTIAL.db"
-
-if __name__ == "__main__":
-
-    with sqlite3.connect(database_location) as conn:
-        conn.row_factory = sqlite3.Row
-        
-        print("1.------------Select All Countries--------------------------------------------------------------------------------")
-        select_all_countries(conn)
-        print("----------------------------------------------------------------------------------------------------------------")
-        print("\n")
-
-        print("2.------------Select All Cities-----------------------------------------------------------------------------------")
-        select_all_cities(conn)
-        print("----------------------------------------------------------------------------------------------------------------")
-        print("\n")
-
-        print("3.------------Average Annual Temperature--------------------------------------------------------------------------")
-        average_annual_temperature(conn, 1, "2021")
-        print("----------------------------------------------------------------------------------------------------------------")
-        print("\n")
-
-        print("4.------------Average Seven Day Precipitation---------------------------------------------------------------------")
-        average_seven_day_precipitation(conn, 2, "2022-05-16")
-        print("----------------------------------------------------------------------------------------------------------------")
-        print("\n")
-
-        print("5.------------Average Mean Temperature By City--------------------------------------------------------------------")
-        average_mean_temp_by_city(conn, "2022-05-19", "2022-05-30")  
-        print("----------------------------------------------------------------------------------------------------------------")
-        print("\n")
-
-        print("6.------------Average Annual Precipitation By Country-------------------------------------------------------------")
-        average_annual_precipitation_by_country(conn, "2020")
-        print("----------------------------------------------------------------------------------------------------------------")
-        print("\n")
-
-        print("7.------------Min, Max and Mean Temperature and Precipitation By City---------------------------------------------")
-        min_max_mean_temperature_and_precipitation_by_city(conn, "2021")
-        print("----------------------------------------------------------------------------------------------------------------")
-        print("\n")
-
-        print("8.------------Minimum and Maximum Monthly Temperature By City-----------------------------------------------------")
-        minimum_and_maximum_monthly_temperature_by_city(conn, 2, "2021")
-        print("----------------------------------------------------------------------------------------------------------------")
-        print("\n")
-
-        print("9.------------Average Temperature By City And Country------------------------------------------------------------")
-        average_temperature_vs_average_precipitation(conn, 1, "2022-05-16")
-        print("---------------------------------------------------------------------------------------------------------------")
-        print("\n")
-
-        print("10.------------Seven Day Temperature By City And Country---------------------------------------------------------------")
-        seven_day_temperature_by_city(conn, 1, "2022-05-16")
-        print("---------------------------------------------------------------------------------------------------------------")
-        print("\n")
-
-        print("11.------------Seven Day Precipitation By City--------------------------------------------------------------------")
-        seven_day_precipitation(conn, 2, "2022-05-16")
-        print("---------------------------------------------------------------------------------------------------------------")
-        print("\n")

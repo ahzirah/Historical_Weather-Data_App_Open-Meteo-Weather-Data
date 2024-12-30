@@ -11,8 +11,6 @@
 
 
 # Imports
-import sqlite3
-import os
 import matplotlib.pyplot as plt
 from phase_1 import ( 
     min_max_mean_temperature_and_precipitation_by_city, 
@@ -31,7 +29,7 @@ def plot_open_meteo_weather_data_app(connection, city_id):
      
    # 1. Bar Chart To Show The Seven Day Precipitation
 
-      data = seven_day_precipitation(connection, city_id, "2022-01-16")
+      data = seven_day_precipitation(connection, city_id, "2022-06-03")
       dates = [row[0] for row in data]
       precipitation = [row[1] for row in data]
 
@@ -69,7 +67,7 @@ def plot_open_meteo_weather_data_app(connection, city_id):
 
    # 3. Line Chart To Show The Seven Day Average Temperature Variation
 
-      data = seven_day_temperature_by_city(connection, city_id, "2022-01-16")
+      data = seven_day_temperature_by_city(connection, city_id, "2022-06-03")
       days = [row[0] for row in data]
       avg_temp = [row[1] for row in data]
 
@@ -145,7 +143,7 @@ def plot_open_meteo_weather_data_app(connection, city_id):
 
    # 6. SCATTER PLOT CHART TO SHOW THE AVERAGE TEMPERATURE AGAINST AVERAGE PRECIPITATION FOR SEVEN DAYS
 
-      data = average_temperature_vs_average_precipitation(connection, city_id, "2022-05-16")
+      data = average_temperature_vs_average_precipitation(connection, city_id, "2022-06-03")
       dates = [row['date'] for row in data]
       avg_temperature = [row['avg_temperature'] for row in data]
       avg_precipitation = [row['avg_precipitation'] for row in data]
@@ -166,42 +164,4 @@ def plot_open_meteo_weather_data_app(connection, city_id):
 
   # DISPLAY ALL CHARTS
       plt.tight_layout() 
-      plt.show()
-
-
-file_path = os.path.abspath(__file__)
-working_directory = os.path.dirname(file_path)
-os.chdir(working_directory)
-
-if __name__ == "__main__":
-    
-    database_location = "CIS4044-N-SDI-OPENMETEO-PARTIAL.db"
-    countries = {"1": "GREAT BRITAIN", "2": "FRANCE"}
-    cities = {"1": "MIDDLESBROUGH", "2": "LONDON", "3": "PARIS", "4": "TOULOUSE"}
-
-    with sqlite3.connect(database_location) as conn:
-      conn.row_factory = sqlite3.Row
-      while True:
-         print("AVAILBLE LOCATIONS:")
-         for country_id, country_name in countries.items():
-                print(f"COUNTRY: {country_name} (ID: {country_id})")
-         for city_id, city_name in cities.items():
-                print(f"  CITY: {city_name} (ID: {city_id})")
-
-         user_input = input("Enter 'Country ID City ID' (e.g., '1 2') or 'x' to exit: ").strip()
-         if user_input.lower() == 'x':
-                print("Exiting the application.")
-                break
-         try:
-                country_id, city_id = map(int, user_input.split())
-                if str(country_id) in countries and str(city_id) in cities:
-                    plot_open_meteo_weather_data_app(conn, city_id)
-                else:
-                    print("Invalid IDs. Please try again.")
-         except ValueError:
-                print("Invalid input format. Use 'Country ID City ID'.")
-        
-         
-           
-      
-     
+      plt.show()   
