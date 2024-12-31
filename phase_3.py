@@ -53,7 +53,8 @@ def data_retrieval_and_storage():
                 "city_id" : 2,
             }
             daily_weather_objects.append(weather_object)
-
+            
+        # Set the working directory
         file_path = os.path.abspath(__file__)
         working_directory = os.path.dirname(file_path)
         os.chdir(working_directory)

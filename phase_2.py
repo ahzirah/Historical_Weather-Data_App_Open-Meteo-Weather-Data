@@ -164,9 +164,3 @@ def plot_open_meteo_weather_data_app(connection, city_id):
       plt.tight_layout() 
       plt.show() 
 
-  
-
-# # Example subplot
-# plt.subplot(3, 2, 1)
-# plt.bar(['Day 1', 'Day 2', 'Day 3'], [10, 15, 7], color='blue')
-# plt.title("Sample Bar Chart") 

@@ -17,7 +17,7 @@ import phase_1 as queries
 from phase_2 import plot_open_meteo_weather_data_app
 from phase_3 import data_retrieval_and_storage
 
-
+# SET THE WORKING DIRECTORY
 file_path = os.path.abspath(__file__)
 working_directory = os.path.dirname(file_path)
 os.chdir(working_directory)
@@ -37,7 +37,7 @@ def phase_1_menu():
         print("3. Average Annual Temperature")
         print("4. Average Seven Day Precipitation")
         print("5. Average Mean Temperature By City")
-        print("6. Average Annual Precipitation By Country-")
+        print("6. Average Annual Precipitation By Country")
         print("7. Min, Max and Mean Temperature and Precipitation By City")
         print("8. Minimum and Maximum Monthly Temperature By City")
         print("9. Average Temperature By City And Country")
