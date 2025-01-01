@@ -29,7 +29,6 @@ class WeatherApp(tk.Tk):
             widget.destroy()
 
         tk.Label(self, text="Weather App Main Menu", font=("Arial", 18)).pack(pady=20)
-
         tk.Button(self, text="Phase 1: SQLite Queries", command=self.phase_1_menu, width=40).pack(pady=10)
         tk.Button(self, text="Phase 2: Graph Plots", command=self.phase_2_menu, width=40).pack(pady=10)
         tk.Button(self, text="Phase 3: Data Retrieval", command=self.phase_3_menu, width=40).pack(pady=10)
