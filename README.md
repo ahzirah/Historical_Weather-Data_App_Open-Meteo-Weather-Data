@@ -34,20 +34,30 @@ This phase does only one thing, which is to query data from the sqlite3 database
 2. Phase two: This phases includes the ussage of matplotlib to generate charts based on data taken from the sqlite3 database provided.
 in this application, the following charts were used to visualize the trends in the historical weather data:
 
-- Grouped Bar Chart
+- Grouped Bar Chart <br>
+The grouped bar chart is plot with the temperature/precipitation values on the x axis and the cities on the y axis. <br>
+this visual displays grouped bars for each city showing the min/max/mean temperatures and average precipitation.
 ![alt text](</images_charts/Screenshot 2025-01-01 at 02.05.58.png>)
 
-- Line Chart
+- Line Chart <br>
+The line chart is plot with the temperature on the x axis and the dates on the y axis. this visual displays the average temperature for a particular city over a period of time (for seven days).
 ![alt text](</images_charts/Screenshot 2025-01-01 at 02.11.34.png>)
 
-- Bar Charts
+- Bar Charts <br>
+The bar charts on the left plots the seven day precipittation for a specified city while that of the right plots the average temperature for a aset of cities.
 ![alt text](</images_charts/Screenshot 2025-01-01 at 02.14.49.png>)
 
-- Multiline chart
+- Multiline chart <br>
+The multiline chart is plot with temperature on the x axis and plots on the y axis. this visual displays the mimum and maximum temperature for a specified city over bthe span of twelve months with one of the lines representing the minimum and the other representing the maximum temperatures.
 ![alt text](</images_charts/Screenshot 2025-01-01 at 02.13.14.png>)
 
-- Scatter Plot
+- Scatter Plot <br>
+The scatter chart is plot with the average precipitation on the x axis and the average temperature on the y axis, the points of the bubbles on the chart shows the temperature and precipitation for that date, the date is an id attached to the bubbles and this is also for a period of time (seven days) meaning every bubble has a date tag.
 ![alt text](</images_charts/Screenshot 2025-01-01 at 02.16.58.png>)
+
+- phase two overall visualization <br>
+the image below is an overall visual of phase 2.
+![alt text](images_charts/image.png)
 
 3. Phase three: This phase includes retrieving data from a public web API (open-meteo weather data), updating the data and storing it in the sqlite3 database.
 
