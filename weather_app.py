@@ -152,14 +152,11 @@ def phase_3_menu():
             print("--------------------------------------------------------")
             print("\n")
             print("1. Retrieve and Store Weather Data")
-            print("2. View Stored Weather Data")
             print("0. Exit to Main Menu")
             
             choice = input("Enter your choice: ")
             if choice == "1":
                 data_retrieval_and_storage()
-            # elif choice == "2":
-            #     view_stored_weather_data()
             elif choice == "0":
                 break
             else:

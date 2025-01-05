@@ -122,7 +122,6 @@ class WeatherApp(tk.Tk):
         tk.Label(self, text="Phase 3: Data Retrieval", font=("Arial", 18)).pack(pady=20)
 
         tk.Button(self, text="Retrieve and Store Weather Data", command=self.retrieve_weather_data, width=50).pack(pady=10)
-        tk.Button(self, text="View Stored Weather Data", command=self.view_stored_data, width=50).pack(pady=10)
         tk.Button(self, text="Back to Main Menu", command=self.create_main_menu, width=30).pack(pady=20)
 
     def retrieve_weather_data(self):
@@ -132,19 +131,6 @@ class WeatherApp(tk.Tk):
         except Exception as e:
             messagebox.showerror("Error", str(e))
 
-    def view_stored_data(self):
-        try:
-            with sqlite3.connect(database_location) as conn:
-                conn.row_factory = sqlite3.Row
-                cursor = conn.execute("SELECT * FROM weather_data")
-                data = cursor.fetchall()
-                if data:
-                    result = "\n".join([str(dict(row)) for row in data])
-                    messagebox.showinfo("Stored Data", result)
-                else:
-                    messagebox.showinfo("Stored Data", "No data found.")
-        except Exception as e:
-            messagebox.showerror("Error", str(e))
 
 
 if __name__ == "__main__":
